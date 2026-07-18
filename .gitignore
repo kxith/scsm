@@ -3,3 +3,5 @@
 data/*
 !data/schemas/
 .DS_Store
+*.idea/
+.agents/
