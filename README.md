@@ -12,7 +12,7 @@ Multinational Enterprises (MNEs) face a structural trilemma: doctrinal legal map
 
 The SCSM bridges this gap by fusing epistemic pluralism with hard-law conflict resolution. It models and calculates the composite **Regulatory Fragmentation Index (RFI)** based on five key metrics:
 
-- **Base Doctrinal Divergence (BDD)**
+- **Base Doctrinal Divergence (BDD)1**
 - **Institutional Capacity Modifier (ICM)**
 - **Extraterritorial Conflict Coefficient (ECC)**
 - **Treaty Conflict Coefficient (TCC)**
@@ -54,7 +54,6 @@ scsm/
     ├── __init__.py
     └── test_engine.py
 ```
-
 
 ## Stack & Requirements
 

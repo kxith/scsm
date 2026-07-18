@@ -1,0 +1,85 @@
+# ============================================================
+# SCSM v4.0 — Strategic Compliance Synthesis Model
+# Python dependencies for calculators, data engineering, notebooks
+# ============================================================
+
+# --- Core Data Processing ---
+pandas>=2.1.0                   # Core data processing library
+polars>=1.35.0                  # High-speed alternative to pandas
+pandas-stubs>=2.3.2             # Type hints for pandas
+numpy>=1.24.0                   # Numerical computation and arrays
+pyarrow>=14.0.0                 # Parquet handling (snapshots/batches)
+duckdb>=1.4.3                   # Primary dynamic database
+duckdb-engine>=0.13.0           # SQLAlchemy dialect for DuckDB
+sqlalchemy>=2.0.0               # ORM-style access across scripts/notebooks
+nbformat>=5.0.0                 # Jupyter notebook handling
+
+# --- Statistics & Validation (Delphi panel, κ, Pearson's r) ---
+scipy>=1.11.0                   # Delphi IQR/consensus math, PAI weighting
+statsmodels>=0.14.0             # Criterion validity (Pearson's r)
+krippendorff>=0.6.0             # Inter-coder reliability (κ ≥ 0.80, §3)
+
+# --- Data Validation & Quality ---
+pydantic>=2.5.0                 # Type-annotated data validation
+pandera>=0.17.0                 # Statistical validation for DataFrames/schemas
+
+# --- Graph / Network Modeling (Treaty Conflict, BIT/ISDS mapping) ---
+networkx>=3.2                   # Hierarchy of Conflict Resolution, TCC graphs
+
+# --- Entity & Jurisdiction Resolution ---
+rapidfuzz>=3.5.0               # Fuzzy matching (OpenSanctions/PEPs, entity linking)
+pycountry>=23.12.0             # Consistent jurisdiction/country coding
+
+# --- Web/Doc Scraping (WTO DSDB, FAOLex, PACMap — no clean API) ---
+requests>=2.31.0               # HTTP requests library
+beautifulsoup4>=4.12.0         # Web scraping library
+lxml>=4.9.0                    # XML parsing library
+
+# --- Date & Time Processing ---
+python-dateutil>=2.8.2         # Date/time manipulation
+pytz>=2023.3                   # Time zone handling
+
+# --- Configuration & Environment ---
+python-dotenv>=1.0.0           # Environment variables
+pyyaml>=6.0                    # YAML parsing
+
+# --- Schema Compiler (human-readable YAML -> machine JSON Schema) ---
+ruamel.yaml>=0.18.0            # Round-trip YAML: preserves comments/order/anchors
+jsonschema>=4.20.0             # Validate compiled output
+referencing>=0.35.0            # $ref resolution across schema/table/view definitions
+check-jsonschema>=0.28.0       # CLI/validate compiled JSON Schemas in CI
+
+# --- Visualization ---
+matplotlib>=3.7.0              # Plotting and visualization
+plotly>=5.18.0                 # Interactive RFI/PAI/ECC visualizations
+
+# --- Logging & Monitoring ---
+structlog>=22.0.0              # Structured logging
+rich>=14.0.0                   # Rich text formatting
+loguru>=0.7.0                  # Alternative logging library
+tqdm>=4.66.0                   # Progress bars
+
+# --- Excel Handling ---
+openpyxl>=3.1.5                # Excel reader/writer
+xlsxwriter>=3.1.0              # Excel writer
+
+# --- PDF / Legal Document Extraction (treaties, BITs, dispute filings) ---
+pymupdf>=1.20.0                # PDF processing
+pdfplumber>=0.10.0             # PDF parsing
+camelot-py>=1.0.0              # PDF table extraction
+
+# --- NLP (optional — Stage 1 doctrinal coding automation) ---
+spacy>=3.5.0                   # NLP library
+
+# --- Utilities ---
+
+# --- Testing & Tooling ---
+pytest>=7.4.0                  # Testing framework
+pytest-cov>=4.1.0              # Coverage reporting
+pytest-html>=4.2.0             # HTML test reports
+ruff>=0.4.0                    # Lint + format (replaces black+flake8)
+mypy>=1.7.0                    # Static type checking
+
+# --- TBD ---
+# streamlit>=1.28.0            # Public-facing RFI dashboard
+# altair>=5.1.0                # Alternative visualization library
