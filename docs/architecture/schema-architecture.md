@@ -5,9 +5,31 @@ This document outlines the design, schema fields, compilation lifecycle, and met
 
 ---
 
-## 1. Architectural Overview
+## 1. Database Architecture (Supabase + DuckDB Hybrid)
 
-To ensure data structures are highly readable for humans (for governance, compliance audits, and collaborative review) while remaining easily readable for code pipelines, the database schema definition uses a dual-representation paradigm:
+To provide both secure, authenticated application state and high-performance analytical processing, the SCSM database uses a split-role hybrid architecture:
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│  Supabase (Postgres) — SYSTEM OF RECORD                  │
+│  Every table in schema.sql, unchanged grain, + auth/RLS  │
+├──────────────────────────────────────────────────────────┤
+│  DuckDB — COMPUTE ENGINE (stateless, ephemeral)          │
+│  ATTACH to Supabase via postgres extension → read live   │
+│  + reads L1 Parquet snapshots directly                   │
+│  Runs BDD/ICM/ECC/TCC/ISDS/PAI/RFI, WRITES results back  │
+│  to Supabase's pair_metrics via the same connection      │
+└──────────────────────────────────────────────────────────┘
+```
+
+* **Supabase (PostgreSQL):** Serves as the single source of truth for all structured data (`dimensions`, `sources`, `jurisdictions`, `weight_sets`, `pair_metrics`, `audit_logs`). It provides Row-Level Security (RLS), proper foreign key constraints across all data, native `JSONB` support for schema-less structures, and verifiable `auth.users(id)` auditing.
+* **DuckDB:** Acts as the ephemeral compute engine. It does not use a persistent `.duckdb` file. Instead, it attaches to Postgres over the network to read state, reads L1 Parquet snapshots directly, performs vectorised metric calculations, and writes the `pair_metrics` results back to Postgres.
+
+---
+
+## 2. Compilation Architecture Overview
+
+To ensure data structures are highly readable for humans (for governance, compliance audits, and collaborative review) while remaining easily readable for code pipelines, the schema definition uses a dual-representation paradigm:
 
 ```
     [ human developer ]
@@ -30,7 +52,7 @@ To ensure data structures are highly readable for humans (for governance, compli
 
 ---
 
-## 2. Directory Structure
+## 3. Directory Structure
 
 ```text
 scsm/
@@ -45,11 +67,11 @@ scsm/
 
 ---
 
-## 3. Metadata Specification (The Schema of Schemas)
+## 4. Metadata Specification (The Schema of Schemas)
 
 Every schema file must define the following metadata envelope:
 
-### 3.1 Header Attributes
+### 4.1 Header Attributes
 
 
 | Key                  | Type   | Allowed Values                                                                                          | Purpose                                                                      |
@@ -67,7 +89,7 @@ Every schema file must define the following metadata envelope:
 | `last_updated`       | String | `YYYY-MM-DD`                                                                                            | Date of last modification (updated automatically by compiler).               |
 | `update_frequency`   | String | `Static`, `Batch`, `Dynamic`                                                                            | Declares data mutation frequency.                                            |
 
-### 3.2 Field Definitions (`fields`)
+### 4.2 Field Definitions (`fields`)
 
 The `fields` array contains a list of column or key definitions. Each field consists of:
 
@@ -85,11 +107,11 @@ The `fields` array contains a list of column or key definitions. Each field cons
 
 ---
 
-## 4. Compilation & Date Write-Back Mechanics
+## 5. Compilation & Date Write-Back Mechanics
 
 To maintain formatting, inline comments, and code aesthetics, the compiler implements **Option B: Surgical Text Replacement**.
 
-### 4.1 The Write-Back Process
+### 5.1 The Write-Back Process
 
 1. Read the target `.schema.yaml` file as raw text.
 2. Locate the line declaring the update date at the root of the file:
@@ -97,7 +119,7 @@ To maintain formatting, inline comments, and code aesthetics, the compiler imple
 3. Replace the date with the current system date (`datetime.date.today().isoformat()`).
 4. Write the modified raw text back to `.schema.yaml` (preserving all comments and line spacing).
 
-### 4.2 The Compilation Process
+### 5.2 The Compilation Process
 
 1. Parse the updated text using `yaml.safe_load(updated_text)`.
 2. Convert the resulting dictionary to a serialized JSON string:
@@ -106,11 +128,11 @@ To maintain formatting, inline comments, and code aesthetics, the compiler imple
 
 ---
 
-## 5. CLI Execution Guide
+## 6. CLI Execution Guide
 
 The `schema_compiler.py` script is built using `typer` and `rich` for structured logging.
 
-### 5.1 Batch Compile (All Files)
+### 6.1 Batch Compile (All Files)
 
 ```bash
 python src/database/schema_compiler.py compile
@@ -118,7 +140,7 @@ python src/database/schema_compiler.py compile
 
 *Processes all `.yaml` and `.yml` files in the source directory.*
 
-### 5.2 Target Compile (Selected Files)
+### 6.2 Target Compile (Selected Files)
 
 ```bash
 python src/database/schema_compiler.py compile jurisdictions.schema.yaml pair_metrics.schema.yaml
@@ -126,7 +148,7 @@ python src/database/schema_compiler.py compile jurisdictions.schema.yaml pair_me
 
 *Processes only the specified files.*
 
-### 5.3 Rich Output Report
+### 6.3 Rich Output Report
 
 The compiler outputs a structured console table highlighting:
 

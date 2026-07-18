@@ -1,3 +1,21 @@
+
+"""
+Schema Compiler
+
+This script compiles YAML schema files to JSON schema files, updating the last_updated date.
+
+It scans a source directory of YAML schemas, updates the `last_updated` field inside the YAML
+files to the current date using regular expressions, loads the YAML content, and writes the
+corresponding JSON schema representations to a target directory.
+
+Attributes:
+    app (typer.Typer): The Typer CLI application instance.
+    console (Console): The rich Console instance for colored output.
+    BASE_DIR (str): Absolute path to the repository root directory.
+    YAML_DIR (str): Path to the source directory containing YAML schema definitions.
+    JSON_DIR (str): Path to the output directory for compiled JSON schemas.
+"""
+
 import os
 import glob
 import re
@@ -21,6 +39,20 @@ os.makedirs(JSON_DIR, exist_ok=True)
 def compile_schemas(files: list[str] = typer.Argument(None, help="List of YAML files to compile. If omitted, compiles all.")):
     """
     Compile YAML schemas to JSON schemas, updating the last_updated date.
+
+    This command parses the specified YAML/YML files (or all files in the source YAML directory
+    if none are specified), updates the `last_updated` date in the source files to today's date,
+    and compiles them to JSON format in the output JSON directory.
+
+    A summary table is printed to the console using the `rich` library at the end of execution.
+
+    Args:
+        files (list[str], optional): A list of YAML files to compile. Paths can be absolute
+            or relative to the source YAML directory. If omitted or empty, all YAML/YML files
+            in the source YAML directory will be compiled.
+
+    Raises:
+        typer.Exit: Raised when no YAML files are found to compile.
     """
     if not files:
         files = glob.glob(os.path.join(YAML_DIR, "*.yaml")) + glob.glob(os.path.join(YAML_DIR, "*.yml"))
@@ -35,7 +67,7 @@ def compile_schemas(files: list[str] = typer.Argument(None, help="List of YAML f
         files = resolved_files
 
     if not files:
-        console.print("[yellow]No YAML files found to compile.[/yellow]")
+        console.print("[orange]No YAML files found to compile.[/orange]")
         raise typer.Exit()
 
     table = Table(title="Schema Compilation Report")
@@ -53,7 +85,7 @@ def compile_schemas(files: list[str] = typer.Argument(None, help="List of YAML f
 
     for filepath in files:
         if not os.path.exists(filepath):
-            table.add_row("[red]FAILURE[/red]", os.path.basename(filepath), "-", "File not found")
+            table.add_row("[red]:cross_mark: FAILURE[/red]", os.path.basename(filepath), "-", "File not found")
             fail_count += 1
             continue
 
@@ -81,14 +113,14 @@ def compile_schemas(files: list[str] = typer.Argument(None, help="List of YAML f
             with open(json_filepath, 'w', encoding='utf-8') as f:
                 json.dump(schema_data, f, indent=2, ensure_ascii=False)
 
-            table.add_row("[green]SUCCESS[/green]", filename, json_filename, "Compiled successfully")
+            table.add_row("[yellow2]SUCCESS[/yellow2]", filename, json_filename, "Compiled successfully")
             success_count += 1
         except Exception as e:
-            table.add_row("[red]FAILURE[/red]", filename, json_filename, str(e))
+            table.add_row("[red]:cross_mark: FAILURE[/red]", filename, json_filename, str(e))
             fail_count += 1
 
     console.print(table)
-    console.print(f"Total: {success_count + fail_count} | [green]Success: {success_count}[/green] | [red]Failed: {fail_count}[/red]")
+    console.print(f"Total: {success_count + fail_count} | [yellow2]Success: {success_count}[/yellow2] | [red]Failed: {fail_count}[/red]")
 
 if __name__ == "__main__":
     app()
