@@ -27,10 +27,20 @@ The repository is organized according to the following layout:
 
 ```text
 scsm/
+├── docs/                          # Project documentation, architectural specs, and guides
+│   ├── architecture/              # System design models, data flow pipelines, and core methodologies
+│   │   ├── overview/              # High-level system architecture and modular breakdown
+│   │   └── data-flow.md           # Processing pipeline flow mapping (L1 ingestion to L4 registry)
+│   ├── reference/                 # Technical references for APIs, CLI tools, and schemas
+│   │   ├── api/                   # Developer API integrations and programmatic interfaces
+│   │   └── cli.md                 # CLI command reference, arguments, and usage examples
+│   └── guides/                    # Operational guidelines and developer procedures
+│       ├── testing-strategy.md    # Unit testing protocols and HavenTech baseline replication
+│       └── logging-and-monitoring.md # Observability, audit logging, and telemetry setup
 ├── data/                          # Structured data folders (ignored in git except schemas)
 │   ├── raw/                       # L1 raw input data downloads
 │   ├── snapshots/                 # L1 dated, immutable Parquet snapshots
-│   ├── processed/                 # L2 DuckDB database storage (scsm.db)
+│   ├── processed/                 # L2 Data processing outputs and ephemeral states
 │   └── registry/                  # L4 Transparency Registry JSON/Parquet exports
 ├── output/                        # Dynamic runs, report generation, and visualizations
 ├── notebooks/                     # Colab and Jupyter notebooks for EDA and stress-tests
@@ -40,9 +50,10 @@ scsm/
 │   ├── ingestion/                 # L1 connectors (WGI, V-Dem, CPI, OpenSanctions)
 │   │   ├── __init__.py
 │   │   └── connectors.py
-│   ├── database/                  # L2 DuckDB table structures, views, and seed data
+│   ├── database/                  # L2 Supabase (Postgres) schema, DuckDB compute references, schemas
 │   │   ├── __init__.py
-│   │   └── schema.sql
+│   │   ├── schema.sql             # Supabase system of record schema (RLS, JSONB, identity)
+│   │   └── duckdb_schema.sql      # DuckDB ephemeral schema
 │   ├── engine/                    # L3 pure-function calculation modules (BDD, ICM, RFI, etc.)
 │   │   ├── __init__.py
 │   │   ├── metrics.py
@@ -59,7 +70,8 @@ scsm/
 
 ---
 
-- **Database Engine:** [DuckDB](https://duckdb.org/) (for dynamic, zero-copy, highly performant SQL analysis)
+- **System of Record (OLTP):** [Supabase (PostgreSQL)](https://supabase.com/) (Handles auth, Row-Level Security, JSONB, structured data logic)
+- **Compute Engine (OLAP):** [DuckDB](https://duckdb.org/) (Attached to Postgres via `postgres` extension for ephemeral, highly performant analytical runs)
 - **Data Snapshot Format:** [Apache Parquet](https://parquet.apache.org/) (for immutable historical record auditing)
 - **Language:** Python 3.10+
 - **Primary Libraries:** `polars`, `pandas`, `numpy`, `pyarrow`, `duckdb`
