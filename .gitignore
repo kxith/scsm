@@ -1,0 +1,5 @@
+*.vscode/
+.venv/
+data/*
+!data/schemas/
+.DS_Store
