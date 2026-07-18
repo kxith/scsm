@@ -1,0 +1,84 @@
+domain_key: scsm
+table_name: pair_metrics
+table_type: fact
+type: struct
+version: '1.0'
+schema_category: field_metadata
+architectural_role: computation_audit_layer
+storage_format: table
+description: Computed metrics and RFI scores for jurisdiction pairs.
+last_updated: '2026-07-18'
+update_frequency: Dynamic
+fields:
+- name: id
+  type: BIGINT
+  nullable: false
+  metadata:
+    description: Surrogate primary key
+    constraint: PRIMARY_KEY
+- name: jurisdiction_pair_id
+  type: BIGINT
+  nullable: false
+  metadata:
+    description: Foreign key to jurisdiction_pairs
+- name: weight_set_id
+  type: BIGINT
+  nullable: false
+  metadata:
+    description: Foreign key to weight_sets used
+- name: bdd
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Base Doctrinal Divergence
+- name: icm
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Institutional Capacity Modifier
+- name: ecc
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Extraterritorial Conflict Coefficient
+- name: tcc
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Treaty Conflict Coefficient
+- name: isds_raw
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Raw ISDS score
+- name: isds_adjusted
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Adjusted ISDS score after DefenseMultiplier
+- name: defense_multiplier_applied
+  type: BOOLEAN
+  nullable: false
+  default_value: 'FALSE'
+  metadata:
+    description: Whether the DefenseMultiplier was applied
+- name: pai
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Public Action Index
+- name: raw_rfi
+  type: DECIMAL(6,2)
+  nullable: false
+  metadata:
+    description: Unbounded raw RFI
+- name: rfi
+  type: DECIMAL(5,2)
+  nullable: false
+  metadata:
+    description: Final RFI score (0-100)
+- name: computed_at
+  type: TIMESTAMP
+  nullable: false
+  metadata:
+    description: Timestamp of computation

@@ -1,0 +1,31 @@
+{
+  "domain_key": "scsm",
+  "schema_name": "bdd_weights",
+  "table_type": "metadata",
+  "type": "struct",
+  "version": "1.0",
+  "schema_category": "field_metadata",
+  "architectural_role": "computation_audit_layer",
+  "storage_format": "json_document",
+  "description": "JSON payload schema for dimension and PAI weights.",
+  "last_updated": "2026-07-18",
+  "update_frequency": "Static",
+  "fields": [
+    {
+      "name": "dimension_weights",
+      "type": "JSON",
+      "nullable": false,
+      "metadata": {
+        "description": "Mapping of dimension IDs to their calculated Delphi weights"
+      }
+    },
+    {
+      "name": "pai_weights",
+      "type": "JSON",
+      "nullable": false,
+      "metadata": {
+        "description": "Mapping of PAI components (mad, cfd, ssi) to their weights"
+      }
+    }
+  ]
+}

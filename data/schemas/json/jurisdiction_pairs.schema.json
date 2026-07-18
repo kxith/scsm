@@ -1,0 +1,40 @@
+{
+  "domain_key": "scsm",
+  "table_name": "jurisdiction_pairs",
+  "table_type": "base_entity",
+  "type": "struct",
+  "version": "1.0",
+  "schema_category": "field_metadata",
+  "architectural_role": "relational_pair_layer",
+  "storage_format": "table",
+  "description": "Atomic relational unit mapping home jurisdiction to host.",
+  "last_updated": "2026-07-18",
+  "update_frequency": "Static",
+  "fields": [
+    {
+      "name": "id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Surrogate primary key",
+        "constraint": "PRIMARY_KEY"
+      }
+    },
+    {
+      "name": "home_jurisdiction_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Foreign key to home jurisdiction"
+      }
+    },
+    {
+      "name": "host_jurisdiction_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Foreign key to host jurisdiction"
+      }
+    }
+  ]
+}

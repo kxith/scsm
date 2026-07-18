@@ -1,0 +1,77 @@
+{
+  "domain_key": "scsm",
+  "table_name": "weight_sets",
+  "table_type": "metadata",
+  "type": "struct",
+  "version": "1.0",
+  "schema_category": "field_metadata",
+  "architectural_role": "computation_audit_layer",
+  "storage_format": "table",
+  "description": "Versioned Delphi panel weight outputs.",
+  "last_updated": "2026-07-18",
+  "update_frequency": "Dynamic",
+  "fields": [
+    {
+      "name": "id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Surrogate primary key",
+        "constraint": "PRIMARY_KEY"
+      }
+    },
+    {
+      "name": "panel_round",
+      "type": "INTEGER",
+      "nullable": false,
+      "metadata": {
+        "description": "Delphi panel round number"
+      }
+    },
+    {
+      "name": "iqr",
+      "type": "DECIMAL(4,2)",
+      "nullable": true,
+      "metadata": {
+        "description": "Interquartile range consensus check"
+      }
+    },
+    {
+      "name": "status",
+      "type": "VARCHAR",
+      "nullable": false,
+      "default_value": "'illustrative'",
+      "metadata": {
+        "description": "Validation status",
+        "allowed_values": [
+          "illustrative",
+          "panel_validated"
+        ]
+      }
+    },
+    {
+      "name": "consensus_date",
+      "type": "DATE",
+      "nullable": true,
+      "metadata": {
+        "description": "Date of consensus"
+      }
+    },
+    {
+      "name": "bdd_weights_json",
+      "type": "VARCHAR",
+      "nullable": true,
+      "metadata": {
+        "description": "JSON string of BDD dimension weights"
+      }
+    },
+    {
+      "name": "pai_weights_json",
+      "type": "VARCHAR",
+      "nullable": true,
+      "metadata": {
+        "description": "JSON string of PAI component weights"
+      }
+    }
+  ]
+}

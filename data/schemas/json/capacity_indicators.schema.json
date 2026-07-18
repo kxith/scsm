@@ -1,0 +1,72 @@
+{
+  "domain_key": "scsm",
+  "table_name": "capacity_indicators",
+  "table_type": "fact",
+  "type": "struct",
+  "version": "1.0",
+  "schema_category": "field_metadata",
+  "architectural_role": "core_ingestion_layer",
+  "storage_format": "table",
+  "description": "Indicators feeding Institutional Capacity Modifier (ICM).",
+  "last_updated": "2026-07-18",
+  "update_frequency": "Batch",
+  "fields": [
+    {
+      "name": "id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Surrogate primary key",
+        "constraint": "PRIMARY_KEY"
+      }
+    },
+    {
+      "name": "jurisdiction_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Foreign key to jurisdictions"
+      }
+    },
+    {
+      "name": "source_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Foreign key to sources"
+      }
+    },
+    {
+      "name": "indicator",
+      "type": "VARCHAR",
+      "nullable": false,
+      "metadata": {
+        "description": "Indicator name",
+        "allowed_values": [
+          "reg_quality",
+          "rule_law",
+          "political_will",
+          "judicial_indep",
+          "corruption_perc"
+        ]
+      }
+    },
+    {
+      "name": "score",
+      "type": "DECIMAL(4,2)",
+      "nullable": false,
+      "metadata": {
+        "description": "Indicator score (0-10)",
+        "constraint": "CHECK (score BETWEEN 0 AND 10)"
+      }
+    },
+    {
+      "name": "as_of_date",
+      "type": "DATE",
+      "nullable": false,
+      "metadata": {
+        "description": "Date of score validity"
+      }
+    }
+  ]
+}

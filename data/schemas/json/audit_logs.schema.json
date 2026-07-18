@@ -1,0 +1,85 @@
+{
+  "domain_key": "scsm",
+  "table_name": "audit_logs",
+  "table_type": "log",
+  "type": "struct",
+  "version": "1.0",
+  "schema_category": "field_metadata",
+  "architectural_role": "computation_audit_layer",
+  "storage_format": "table",
+  "description": "Audit logs linking decisions to computation runs.",
+  "last_updated": "2026-07-18",
+  "update_frequency": "Dynamic",
+  "fields": [
+    {
+      "name": "id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Surrogate primary key",
+        "constraint": "PRIMARY_KEY"
+      }
+    },
+    {
+      "name": "pair_metric_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "metadata": {
+        "description": "Foreign key to pair_metrics"
+      }
+    },
+    {
+      "name": "epf_assessment_id",
+      "type": "BIGINT",
+      "nullable": true,
+      "metadata": {
+        "description": "Optional foreign key to epf_assessments"
+      }
+    },
+    {
+      "name": "action",
+      "type": "VARCHAR",
+      "nullable": false,
+      "metadata": {
+        "description": "Decision action taken",
+        "allowed_values": [
+          "standardise",
+          "localise_ringfence",
+          "escalate_hierarchy"
+        ]
+      }
+    },
+    {
+      "name": "rfi_at_decision",
+      "type": "DECIMAL(5,2)",
+      "nullable": false,
+      "metadata": {
+        "description": "RFI value at decision time"
+      }
+    },
+    {
+      "name": "decided_by",
+      "type": "VARCHAR",
+      "nullable": false,
+      "metadata": {
+        "description": "Person/System making the decision"
+      }
+    },
+    {
+      "name": "rationale",
+      "type": "VARCHAR",
+      "nullable": true,
+      "metadata": {
+        "description": "Decision rationale"
+      }
+    },
+    {
+      "name": "decided_at",
+      "type": "TIMESTAMP",
+      "nullable": false,
+      "metadata": {
+        "description": "Timestamp of decision"
+      }
+    }
+  ]
+}

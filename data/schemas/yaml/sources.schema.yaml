@@ -1,0 +1,39 @@
+domain_key: scsm
+table_name: sources
+table_type: metadata
+type: struct
+version: '1.0'
+schema_category: field_metadata
+architectural_role: core_ingestion_layer
+storage_format: table
+description: External data sources metadata.
+last_updated: '2026-07-18'
+update_frequency: Static
+fields:
+- name: id
+  type: BIGINT
+  nullable: false
+  metadata:
+    description: Surrogate primary key
+    constraint: PRIMARY_KEY
+- name: name
+  type: VARCHAR
+  nullable: false
+  metadata:
+    description: Source name
+    constraint: UNIQUE
+- name: url
+  type: VARCHAR
+  nullable: true
+  metadata:
+    description: Source URL
+- name: retrieval_method
+  type: VARCHAR
+  nullable: true
+  metadata:
+    description: Method of data retrieval
+- name: license
+  type: VARCHAR
+  nullable: true
+  metadata:
+    description: Data license
